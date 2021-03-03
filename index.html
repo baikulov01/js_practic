@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header>
+        <div class="top_menu">
+            <a href="#greeting">Приветствие</a>
+        </div>
+        <div class="top_menu">
+            <a href="#calculation">Треугольник</a>
+        </div>
+        <div class="top_menu">
+            <a href="#string">Строки</a>
+        </div>
+        <div class="top_menu">
+            <a href="#array">Массив</a>
+        </div>
+        <div class="top_menu">
+            <a href="#timer">Тест</a>
+        </div>
+        <div class="top_menu">
+            <a href="#screen">Заставка</a>
+        </div>
+    </header>
+    <div id="user_name_block" hidden>
+        <p id="user_name_place">123</p>
+        <button id="reset_user_name" onclick="resetUserName()">Выйти</button>
+    </div>
+    <main>
+        <div id="text">
+            <h1> Введение в JavaScript </h1>
+            <p>JavaScript — язык программирования, который используется в сайтах. Позволяет создавать разные функции для сайтов, которые воспроизводит браузер.
+                Программы на этом языке называются скриптами.</p>
+
+            <h2>Что может JavaScript в браузере?</h2>
+
+            <p>Современный JavaScript может:</p>
+            <ul>
+                <li>Добавлять новый HTML-код на страницу, изменять существующее содержимое, модифицировать стили.</li>
+                <li>Реагировать на действия пользователя, щелчки мыши, перемещения указателя, нажатия клавиш.</li>
+                <li>Отправлять сетевые запросы на удалённые сервера, скачивать и загружать файлы.</li>
+                <li>Получать и устанавливать cookie, задавать вопросы посетителю, показывать сообщения.</li>
+                <li>Запоминать данные на стороне клиента (local storage).</li>
+            </ul>
+            
+            <h2>Чего НЕ может JavaScript в браузере?</h2>
+
+            <p>Возможности JavaScript в браузере ограничены ради безопасности пользователя.
+            Цель заключается в предотвращении доступа веб-страницы к личной информации или нанесения ущерба данным пользователя.
+            Примеры таких ограничений включают в себя:</p>
+            <ul>
+                <li>
+                    JavaScript на веб-странице не может читать/записывать произвольные файлы на жёстком диске, копировать их или запускать программы. 
+                    Он не имеет прямого доступа к системным функциям ОС. Современные браузеры позволяют ему работать с файлами, но с ограниченным доступом, 
+                    например выбор файла с помощью тега &lt input &gt.
+                </li>
+                <li>
+                    Существуют способы взаимодействия с камерой/микрофоном и другими устройствами, но они требуют явного разрешения пользователя. 
+                    Таким образом, страница с поддержкой JavaScript не может незаметно включить веб-камеру и наблюдать за происходящим.
+                </li>
+                <li>Различные окна/вкладки не знают друг о друге. Иногда одно окно, используя JavaScript, открывает другое окно. 
+                    Но даже в этом случае JavaScript с одной страницы не имеет доступа к другой, если они пришли с разных сайтов.
+                </li>               
+            </ul>
+        </div>
+        <div id="greeting">
+            <h2>Приветствие</h2>
+            <p>Введите имя:</p>
+            <input id="userName" type="text" name="userName" placeholder="Имя">
+            <button id="saveUserName" onclick="greet()">Запустить</button>
+            <div id="greeting_annotation">
+                <p>Необходимо воспользоваться объектом веб-хранилища <strong>localStorage</strong>, который будет хранить имя пользователя после перезагрузки страницы,
+                    при помощи оператора <strong>if</strong> проверить строку на пустоту, и затем с помощью свойства <strong>innerHTML</strong> вывести имя пользователя в отдельном блоке.
+                </p>
+            </div>        
+        </div>
+        <script>
+            function greet(){
+                let userName=document.getElementById('userName').value;
+                if (userName.trim()==''){
+                    alert('Введите непустую строку.');
+                } else {
+                    localStorage.setItem('userName', userName);
+                    alert('Привет, ' + userName + '!');
+                }
+                document.getElementById("user_name_block").hidden=false;
+                document.getElementById("user_name_place").innerHTML="Здравствуй, " + localStorage.getItem('userName') + "!";
+
+            }
+            if ( localStorage.getItem('userName')!=null){
+                document.getElementById("user_name_block").hidden=false;
+            }
+            document.getElementById("user_name_place").innerHTML="Здравствуй, " + localStorage.getItem('userName') + "!";
+
+            function resetUserName(){
+                localStorage.removeItem('userName');
+                document.getElementById("user_name_block").hidden=true;
+            }
+        </script>
+
+        <div id="calculation">
+            <h2>Площадь треугольника</h2>
+            <p>Введите основание треугольника:</p>
+            <input id="base" type="number" >
+            <p>Введите высоту треугольника:</p>
+            <input id="height" type="number" >
+            <button id="getArea" onclick="getArea()">Посчитать</button>
+            <p>Площадь треугольника:</p>
+            <input id="area" type="text" readonly>
+            <div id="calculation_annotation">
+                <p>Необходимо считать введёные данные свойством <strong>value</strong>, и полученный результат присвоить в текстовое поле <strong>input</strong>.</p>
+            </div>
+        </div>
+        <script>
+            function getArea(){
+                let base = document.getElementById("base").value;
+                let height = document.getElementById("height").value;
+                if(base<=0 || height<=0 || base.trim()=='' || height.trim()=='') {
+                    alert("Введите правильные значения.");
+                } else {
+                    document.getElementById("area").value = base*height*0.5; 
+                }
+            }
+        </script>
+        <div id="string">
+            <h2>Сравнение строк</h2>
+            <p>Введите первую строку:</p>
+            <input id="first_str" type="text">
+            <p>Введите вторую строку:</p>
+            <input id="second_str" type="text">
+            <button id="compare" onclick="compare()">Сравнить</button>
+            <h3></h3>
+            <div id="string_annotation">
+                <p>Необходимо считать две строки при помощи свойства <strong>value</strong> и с помощью условного оператора <strong>if</strong> сравнить длины строк методом <strong>length</strong>.</p>
+            </div>
+        </div>
+        <script>
+            function compare(){    
+                let str1=document.getElementById("first_str").value;
+                let str2=document.getElementById("second_str").value;
+                
+                let div = document.querySelector("div#string");
+                
+                let removableNode = document.querySelector("div#string h3")
+                div.removeChild(removableNode);
+               
+                let elem = document.createElement("h3");
+                let elemText;
+                div.appendChild(elem);
+
+                if(str1.length==str2.length){                   
+                    elemText = document.createTextNode("Длина одинаковая")
+                } else {
+                    elemText = document.createTextNode("Длина разная")
+                }
+
+                elem.appendChild(elemText);
+                
+            }
+        </script>
+        <div id="array">
+            <h2>Массив</h2>
+            <p>Введите массив из 5 элементов:</p>
+            <input id="input_array" type="text" >
+            <button id="add_to_arr" onclick="addToArr(array)">Добавить</button>
+            <p>Ваш массив:</p>
+            <input id="_array" type="text" readonly>
+            <button id="clear_arr" onclick="clearArr(array)">Очистить</button>
+            <button id="find_min_max" onclick="findMinMax(array)" disabled >Найти</button>
+            <div id="array_annotation">
+                <p>Необходимо заполнить массив числами, которые вводятся в текстовое поле input, затем в цикле for пройтись по массиву,
+                   найти максимум и минимум, и вывести значения методом <strong>alert</strong>.</p>
+            </div>
+        </div> 
+        <script>
+            let array = [];
+
+            function addToArr(array){
+                let input = document.getElementById("input_array");
+                let arrElem = input.value;
+                
+                array.push(arrElem);
+                input.value="";
+                input.focus();
+                document.getElementById("_array").value+=arrElem + " ";
+                if (array.length==5) {
+                    input.disabled = true;
+                    document.getElementById("find_min_max").disabled = false;;
+                }              
+            }
+
+            function clearArr(array){
+                document.getElementById("_array").value="";
+                while(array.length > 0) {
+                    array.pop();
+                }
+                document.getElementById("input_array").disabled = false; 
+                document.getElementById("find_min_max").disabled = true;;
+            }
+
+            function findMinMax(array){
+                let min = array[0];
+                let max = min;
+                for (i = 1; i < array.length; ++i) {
+                    if (array[i] > max) max = array[i];
+                    if (array[i] < min) min = array[i];
+                }
+                alert("Минимум: " + min + "\n" + "Максимум: " + max);             
+            }
+        </script>
+        <div id="timer">
+            <h2>Таймер</h2>
+            <input id="hours" type="number" value="0" onclick="this.select();" >
+            <input id="minutes" type="number" value="0" onclick="this.select();" >
+            <input id="seconds" type="number" value="0" onclick="this.select();">
+            <button id="start" onclick="timerStart()" >Запустить</button>
+            <button id="reset" onclick="timerReset()">Сброс</button>
+            <p> <span id="my_timer">0:00:00</span> </p>
+            <div id="timer_annotation">
+                <p>Необходимо считать введеные значения методом <strong>value</strong>, воспользоваться встроенной функцией <strong>setTimeout()</strong>,
+                     которая будет выполняться с интервалом 1 секунду, отсчитывать время и заносить в элемент html. </p>
+            </div>
+        </div>
+        <script>
+            
+            let startButton = document.getElementById("start");
+            let resetButton = document.getElementById("reset");
+            let timerShow  = document.getElementById("time");
+            
+            function timerStart(){
+                let hour = document.getElementById("hours").value;
+                let min = document.getElementById("minutes").value;
+                let sec = document.getElementById("seconds").value;
+
+                if (hour>24 || hour<0 || min>59 || min<0 || sec>59 || sec<0){
+                    alert("Неправильные значения.");
+                    document.getElementById("hours").value="";
+                    document.getElementById("minutes").value="";
+                    document.getElementById("seconds").value="";
+                } else {
+                    document.getElementById("my_timer").innerHTML=`${hour}:${min}:${sec}`;
+                    Start();
+                }
+
+            }
+
+            function Start(){                              
+                let time = document.getElementById("my_timer").innerHTML;
+                                                
+                let arr = time.split(":");
+                let h = arr[0];
+                let m = arr[1];
+                let s = arr[2];
+                
+                                
+                if (s == 0) {
+                    if (m == 0) {
+                        if (h == 0) {
+                            return;
+                        }
+                        h--;
+                        m = 60;
+                        if (h < 10) h = "0" + h;
+                    }
+                    m--;
+                    if (m < 10) m = "0" + m;
+                    s = 59;
+                }
+                else s--;
+                if (s < 10) s = "0" + s;
+                document.getElementById("my_timer").innerHTML = h+":"+m+":"+s;
+                setTimeout(Start, 1000);
+            }         
+            function timerReset(){
+                document.getElementById("my_timer").innerHTML=`${"0"}:${"00"}:${"00"}`;
+            }
+        </script>
+        <div id="test">
+            <form name="quiz" action="javascript:check();" class="quizform">
+            <h2>Тест</h2>
+            <h3>1. Где верно указан вывод данных?</h3>
+            <p><input name="q1" type="radio" value="false" > print(Hello);</p>
+            <p><input name="q1" type="radio" value="false" > prompt("Hello");</p>
+            <p><input name="q1" type="radio" value="true"> console.log("Hello");</p>
+
+            <h3>2. Где верно указан запуск всплывающего окна?</h3>
+            <p><input name="q2" type="radio" value="false"> new alert ("Hi");</p>
+            <p><input name="q2" type="radio" value="false"> info ("Hi");</p>
+            <p><input name="q2" type="radio" value="true"> alert ("Hi");</p>
+
+            <h3>3. В чем отличие между локальной и глобальной переменной?</h3>
+            <p><input name="q3" type="radio" value="false"> Локальные видны повсюду, глобальные только в функциях </p>
+            <p><input name="q3" type="radio" value="true"> Глобальные видны повсюду, локальные только в функциях</p>
+            <p><input name="q3" type="radio" value="false"> Отличий нет</p>
+
+            <h3>4. Какие функции выполняет JS?</h3>
+            <p><input name="q4" type="radio" value="false"> Выполняет работу с сервером </p>
+            <p><input name="q4" type="radio" value="false"> Создает разметку на странице сайта</p>
+            <p><input name="q4" type="radio" value="true"> Отвечает за функции на стороне клиента</p>
+
+            <h3>5. Какая переменная записана неверно?</h3>
+            <p><input name="q5" type="radio" value="false"> var num = "string"; </p>
+            <p><input name="q5" type="radio" value="false"> var b = false;</p>
+            <p><input name="q5" type="radio" value="true"> var number = 12,5;</p>
+
+            <h3>6. Где верно указано имя переменной?</h3>
+            <p><input name="q6" type="radio" value="false"> var 1num;</p>
+            <p><input name="q6" type="radio" value="false"> var num-1;</p>
+            <p><input name="q6" type="radio" value="true"> var num_1;</p>
+
+            <h3>7. Где можно использовать JavaScript?</h3>
+            <p><input name="q7" type="radio" value="false"> Веб-приложения </p>
+            <p><input name="q7" type="radio" value="false"> Серверные приложения</p>
+            <p><input name="q7" type="radio" value="true"> Можно во всех перечисленных</p>
+
+            <h3>8. Какие значения можно хранить в переменных?</h3>
+            <p><input name="q8" type="radio" value="false"> Только числа и строки </p>
+            <p><input name="q8" type="radio" value="false"> Строки, числа с точкой и простые числа</p>
+            <p><input name="q8" type="radio" value="true"> Строки, числа с точкой, простые числа и булевые выражения</p>
+
+            <h3>9. Какие циклы есть в языке JavaScript?</h3>
+            <p><input name="q9" type="radio" value="true"> for, while, do while </p>
+            <p><input name="q9" type="radio" value="false"> for, while, do while, foreach</p>
+            <p><input name="q9" type="radio" value="false"> for, forMap, foreach, while</p>
+
+            <h3>10. Что такое условный оператор?</h3>
+            <p><input name="q10" type="radio" value="false"> Конструкция, что выполняет код несколько раз</p>
+            <p><input name="q10" type="radio" value="false"> Конструкция для создания определенной переменной</p>
+            <p><input name="q10" type="radio" value="true"> Оператор сравнения значений</p>
+
+            <div id="form_buttons"></div>
+                <input id="form_submit" value="Проверить" type="submit" /> 
+                <input id="form_reset" value="Сбросить" type="reset" />
+            </form>
+        </div>
+        <script>
+            function check(){
+                let question = 1;
+                let trueAnswers = 0;
+                let choice;
+
+                for (question = 1; question <= 10; question++) {
+                    var q = document.forms['quiz'].elements['q'+question];
+                    for (var i = 0; i < q.length; i++) {
+                        if (q[i].checked) {
+                            choice = q[i].value;
+                        }
+                    }
+                    if (choice=="true") trueAnswers++;
+                }
+                alert("Вы набрали: " +  trueAnswers + "очков");
+            }
+        </script>
+        <div id="screen">
+            <button onclick="fullScreen()">Заставка</button>
+        </div>
+        <div id="wallpaper" hidden onclick="hidden=true">
+            <h2 id="date"></h2>
+        </div>
+        <script>
+            function fullScreen(){
+                document.getElementById("wallpaper").hidden=false;
+                let userName_= localStorage.getItem("userName");
+                let nowDate = new Date().toLocaleDateString();            
+                document.getElementById("date").innerHTML=nowDate + " " + userName_ ;
+            }
+            
+        </script>
+
+    </main> 
+</body>
+</html>
